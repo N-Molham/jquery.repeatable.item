@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+
+.table-responsive code {
+	font-weight: bold;
+}
+
+.panel-body .page-header {
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+.panel-body .page-header:first-child {
+	margin-top: 0;
+}
+
+.prettyprint {
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+}
+
+.downloads {
+	margin-bottom: 14px;
+}

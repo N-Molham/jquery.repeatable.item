@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 			},
 			 my_target: {
 				files: {
-					'js/jquery.repeatable.item.min.js': 'js/jquery.repeatable.item.js',
+					'js/dist/jquery.repeatable.item.min.js': 'js/src/jquery.repeatable.item.js',
 				}
 			}
 		},
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 			}
 		},
 		watch: {
-			files: [ 'css/*', 'js/*' ],
+			files: [ 'css/*', 'js/src/*' ],
 			tasks: [ 'uglify', 'cssmin' ]
 		}
 	} );

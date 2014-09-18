@@ -1,14 +1,17 @@
 /*!
- * Repeatable list item 1.5.5 ( http://nabeel.molham.me/plugins/repeatable.php )
+ * Repeatable list item 1.5.0 (http://n-molham.github.io/jquery.repeatable.item/)
  * Copyright 2014 Nabeel Molham.
  * Licensed under MIT License (http://opensource.org/licenses/MIT)
  */
 ( function ( window ) {
 	jQuery( function( $ ) {
 		$.fn.repeatable_item = function( events ) {
+			// check if doT.js template engine is available
+			if ( typeof doT !== 'object' ) {
+				throw 'doT.js Template engine not found, click here https://github.com/olado/doT';
+			}
 
 			// default events handler
-			// fix: initial events callbacks
 			events = $.extend( {
 				init: function() {},
 				completed: function() {},
@@ -48,7 +51,6 @@
 						}
 
 						// clear placeholder left overs
-						// fix: placeholder regex
 						item_content = item_content.replace( /{[a-zA-Z0-9_\-]+}/g, '' );
 
 						// replace HTML and append to list
@@ -222,12 +224,10 @@
 				}
 
 				// remove selector
-				// fix: general select not only list item
 				$list.item_template.remove_selector = $list.item_template.prop( 'tagName' ).toLowerCase();
 				$list.item_template.remove_selector += '[class*="'+ $list.item_template.prop( 'className' ) +'"]';
 
-				// create add button
-				// fix: wrap add button into "p" tag
+				// create add button and wrap if in p tag
 				$( '<p class="add-wrapper"><a href="#" class="'+ $list.settings.addButtonClass +'">'+ $list.settings.addButtonLabel +'</a></p>' )
 				// insert after the list
 				.insertAfter( $list )
@@ -241,21 +241,24 @@
 
 				// add values if any
 				if ( typeof $list.settings.values === 'object' ) {
-					// loop items for appending
+					// loop items for appending indexes
 					var data_indexes = [];
 					$.each( $list.settings.values, function( item_index, item_data ) {
-						// use index from item data if exists
 						if ( typeof item_data.order_index !== 'undefined' ) {
+							// use index from item data if exists
 							item_index = parseInt( item_data.order_index );
-							data_indexes.push( item_index );
 						}
+						data_indexes.push( item_index );
 
 						// add new item
 						methods.add_item( $list.item_template, $list, item_index, item_data );
 						$list.settings.is_empty = false;
 					} );
-					$list.settings.startIndex = Math.max.apply( Math, data_indexes ) + 1;
-					trace( $list.settings.startIndex );
+
+					if ( data_indexes.length ) {
+						// calculate next index
+						$list.settings.startIndex = Math.max.apply( Math, data_indexes ) + 1;
+					}
 				}
 
 				// empty list label if is set
@@ -290,5 +293,5 @@
 			// chaining
 			return this;
 		};
-	});
+	} );
 } )( window );
