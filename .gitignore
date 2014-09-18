@@ -1,0 +1,5 @@
+/.settings
+/bower_components
+/node_modules
+.buildpath
+.project
