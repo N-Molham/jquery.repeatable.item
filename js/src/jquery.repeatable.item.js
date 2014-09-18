@@ -21,14 +21,14 @@
 
 			// plugins methods
 			var methods = {
-					add_item: function( $template, $list, index, data ) {
+					add_item: function( $list, index, data ) {
 						// check empty item
 						if ( $list.settings.is_empty ) {
 							$list.settings.is_empty = false;
 							$list.find( '.repeatable-empty' ).remove();
 						}
 						// create clone
-						var $new_item = $template.clone();
+						var $new_item = $list.item_template.clone();
 
 						// add new index
 						var item_content = $new_item.html().replace( new RegExp( '{'+ $list.settings.indexKeyName +'}', 'g' ), index );
@@ -39,10 +39,9 @@
 								break;
 
 							case 'object':
+								console.log( $list.item_template_dot );
 								// refill fields data
-								for( var field in data ) {
-									item_content = item_content.replace( new RegExp( '{'+ field +'}', 'g' ), data[field] );
-								}
+								item_content = $list.item_template_dot( data );
 								break;
 
 							default:
@@ -223,6 +222,9 @@
 					throw 'Repeatable Exception: Template item not found.';
 				}
 
+				// compiled template function
+				$list.item_template_dot = doT.template( $list.item_template.outerHTML() );
+
 				// remove selector
 				$list.item_template.remove_selector = $list.item_template.prop( 'tagName' ).toLowerCase();
 				$list.item_template.remove_selector += '[class*="'+ $list.item_template.prop( 'className' ) +'"]';
@@ -236,7 +238,7 @@
 					e.preventDefault();
 
 					// add new item
-					methods.add_item( $list.item_template, $list, $list.settings.startIndex );
+					methods.add_item( $list, $list.settings.startIndex );
 				} );
 
 				// add values if any
@@ -251,7 +253,7 @@
 						data_indexes.push( item_index );
 
 						// add new item
-						methods.add_item( $list.item_template, $list, item_index, item_data );
+						methods.add_item( $list, item_index, item_data );
 						$list.settings.is_empty = false;
 					} );
 
@@ -293,5 +295,12 @@
 			// chaining
 			return this;
 		};
+
+		if ( !$.fn.outerHTML ) {
+			// get element whole HTML layout
+			$.fn.outerHTML = function() {
+				return $( '<div />' ).append( this.eq(0).clone() ).html();
+			};
+		}
 	} );
 } )( window );

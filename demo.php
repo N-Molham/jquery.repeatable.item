@@ -97,14 +97,17 @@
 			?>
 
 			<h1 class="page-header">jQuery Repeatable List Item</h1>
+			<p class="lead">Repeatable item with doT.js template engine</p>
 
 			<section class="downloads">
+				<a href="https://raw.githubusercontent.com/N-Molham/jquery.repeatable.item/master/js/dist/jquery.repeatable.item.min.js" class="btn btn-primary btn-lg">
+					<i class="fa fa-file-code-o fa-lg"></i> JS ( Minified )
+				</a>
+				&nbsp;
 				<a href="https://github.com/N-Molham/jquery.repeatable.item/zipball/master" class="btn btn-success btn-lg">
 					<i class="fa fa-file-archive-o fa-lg"></i> Download .zip
 				</a>
-				<a href="https://github.com/N-Molham/jquery.repeatable.item/tarball/master" class="btn btn-success btn-lg">
-					<i class="fa fa-file-archive-o fa-lg"></i> Download .tar.gz
-				</a>
+				&nbsp;
 				<a href="https://github.com/N-Molham/jquery.repeatable.item" class="btn btn-default btn-lg">
 					<i class="fa fa-github fa-lg"></i> View on GitHub
 				</a>
@@ -308,13 +311,13 @@ $data_json = htmlentities( json_encode( $data ) );
 									<div class="form-group">
 										<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
 										<div class="col-md-8">
-											<input type="email" class="form-control" id="user[{index}][name]" placeholder="Name" value="{name}" />
+											<input type="email" class="form-control" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
 										<div class="col-md-8">
-											<input type="email" class="form-control" id="user[{index}][email]" placeholder="Email" value="{email}" />
+											<input type="email" class="form-control" id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
 										</div>
 										<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
 									</div>
