@@ -1,6 +1,6 @@
 /*!
  * Repeatable list item 1.5.0 (http://n-molham.github.io/jquery.repeatable.item/)
- * Copyright 2014 Nabeel Molham.
+ * Copyright 2014 Nabeel Molham (http://nabeel.molham.me).
  * Licensed under MIT License (http://opensource.org/licenses/MIT)
  */
 ( function ( window ) {
@@ -21,26 +21,56 @@
 
 			// plugins methods
 			var methods = {
+					/**
+					 * Clean final item layout from placeholders
+					 * 
+					 * @param string layout
+					 * @return string
+					 */
+					clean_template_holders: function( layout ) {
+						// index/value cleanup
+						var output = layout.replace( /\{[a-zA-Z0-9_\-]+\}/g, '' );
+
+						// clean template placeholders
+						output = output.replace( doT.templateSettings.evaluate, '' );
+						output = output.replace( doT.templateSettings.interpolate, '' );
+						output = output.replace( doT.templateSettings.encode, '' );
+						output = output.replace( doT.templateSettings.use, '' );
+						output = output.replace( doT.templateSettings.define, '' );
+						output = output.replace( doT.templateSettings.conditional, '' );
+						output = output.replace( doT.templateSettings.iterate, '' );
+
+						return output;
+					},
+					/**
+					 * Add new list item
+					 * 
+					 * @param object $list
+					 * @param integer index
+					 * @param mixed data
+					 * @return void
+					 */
 					add_item: function( $list, index, data ) {
 						// check empty item
 						if ( $list.settings.is_empty ) {
 							$list.settings.is_empty = false;
 							$list.find( '.repeatable-empty' ).remove();
 						}
+
 						// create clone
 						var $new_item = $list.item_template.clone();
 
 						// add new index
-						var item_content = $new_item.html().replace( new RegExp( '{'+ $list.settings.indexKeyName +'}', 'g' ), index );
+						var item_content = $new_item.html();
 
 						// check data
 						switch( typeof data ) {
 							case 'undefined':
+								item_content = $list.item_template_dot( $list.settings.defaultItem );
 								break;
 
 							case 'object':
-								console.log( $list.item_template_dot );
-								// refill fields data
+								// refill fields data template
 								item_content = $list.item_template_dot( data );
 								break;
 
@@ -49,8 +79,11 @@
 								break;
 						}
 
+						// add new index
+						item_content = item_content.replace( new RegExp( '{'+ $list.settings.indexKeyName +'}', 'g' ), index );
+
 						// clear placeholder left overs
-						item_content = item_content.replace( /{[a-zA-Z0-9_\-]+}/g, '' );
+						item_content = this.clean_template_holders( item_content );
 
 						// replace HTML and append to list
 						$new_item.html( item_content ).appendTo( $list );
@@ -61,128 +94,6 @@
 						// trigger event: add new
 						$list.trigger( 'repeatable-new-item', [ $list, $new_item, index, data ] );
 						events.new_item( $list, $new_item, index, data );
-					},
-					array_keys: function ( input, search_value, argStrict ) {
-						//  discuss at: http://phpjs.org/functions/array_keys/
-						var search = typeof search_value !== 'undefined',
-						tmp_arr = [],
-						strict = !! argStrict,
-						include = true,
-						key = '';
-						if ( input && typeof input === 'object' && input.change_key_case ) {
-							// Duck-type check for our own array()-created PHPJS_Array
-							return input.keys(search_value, argStrict);
-						}
-						for ( key in input ) {
-							if (input.hasOwnProperty(key)) {
-								include = true;
-								if ( search ) {
-									if ( strict && input[key] !== search_value ) {
-										include = false;
-									} else if ( input[key] != search_value ) {
-										include = false;
-									}
-								}
-								
-								if ( include ) {
-									tmp_arr[tmp_arr.length] = key;
-								}
-							}
-						}
-						return tmp_arr;
-					},
-					array_max: function () {
-						//  discuss at: http://phpjs.org/functions/max/
-						var ar, retVal, i = 0,
-						n = 0,
-						argv = arguments,
-						argc = argv.length,
-						_obj2Array = function (obj) {
-							if (Object.prototype.toString.call(obj) === '[object Array]') {
-								return obj;
-							} else {
-								var ar = [];
-								for (var i in obj) {
-									if (obj.hasOwnProperty(i)) {
-										ar.push(obj[i]);
-									}
-								}
-								return ar;
-							}
-						}; //function _obj2Array
-						var _compare = function (current, next) {
-							var i = 0,
-							n = 0,
-							tmp = 0,
-							nl = 0,
-							cl = 0;
-							
-							if (current === next) {
-								return 0;
-							} else if (typeof current === 'object') {
-								if (typeof next === 'object') {
-									current = _obj2Array(current);
-									next = _obj2Array(next);
-									cl = current.length;
-									nl = next.length;
-									if (nl > cl) {
-										return 1;
-									} else if (nl < cl) {
-										return -1;
-									}
-									for (i = 0, n = cl; i < n; ++i) {
-										tmp = _compare(current[i], next[i]);
-										if (tmp == 1) {
-											return 1;
-										} else if (tmp == -1) {
-											return -1;
-										}
-									}
-									return 0;
-								}
-								return -1;
-							} else if (typeof next === 'object') {
-								return 1;
-							} else if (isNaN(next) && !isNaN(current)) {
-								if (current === 0) {
-									return 0;
-								}
-								return (current < 0 ? 1 : -1);
-							} else if (isNaN(current) && !isNaN(next)) {
-								if (next === 0) {
-									return 0;
-								}
-								return (next > 0 ? 1 : -1);
-							}
-							
-							if (next == current) {
-								return 0;
-							}
-							return (next > current ? 1 : -1);
-						}; //function _compare
-						if (argc === 0) {
-							throw new Error('At least one value should be passed to max()');
-						} else if (argc === 1) {
-							if (typeof argv[0] === 'object') {
-								ar = _obj2Array(argv[0]);
-							} else {
-								throw new Error('Wrong parameter count for max()');
-							}
-							if (ar.length === 0) {
-								throw new Error('Array must contain at least one element for max()');
-							}
-						} else {
-							ar = argv;
-						}
-						
-						retVal = ar[0];
-						for (i = 1, n = ar.length; i < n; ++i) {
-							if (_compare(retVal, ar[i]) == 1) {
-								retVal = ar[i];
-							}
-						}
-						
-						return retVal;
 					}
 			};
 
@@ -205,6 +116,7 @@
 					confirmRemoveMessage: 'Are Your Sure ?',
 					confirmRemove: 'no',
 					emptyListMessage: 'No Items Found',
+					defaultItem: {},
 					values: [],
 					is_empty: true
 				}, $list.data() );
@@ -227,7 +139,10 @@
 
 				// remove selector
 				$list.item_template.remove_selector = $list.item_template.prop( 'tagName' ).toLowerCase();
-				$list.item_template.remove_selector += '[class*="'+ $list.item_template.prop( 'className' ) +'"]';
+				if ( $list.item_template.is( '[class]' ) ) {
+					// specified more by class
+					$list.item_template.remove_selector += '[class*="'+ $list.item_template.prop( 'className' ) +'"]';
+				}
 
 				// create add button and wrap if in p tag
 				$( '<p class="add-wrapper"><a href="#" class="'+ $list.settings.addButtonClass +'">'+ $list.settings.addButtonLabel +'</a></p>' )

@@ -1,5 +1,8 @@
-
-<!DOCTYPE html>
+<?php 
+$output = filter_input( INPUT_GET, 'output' );
+if ( $output )
+	ob_start();
+?><!DOCTYPE html>
 <html>
 	<head>
 		<meta charset='utf-8'>
@@ -58,8 +61,12 @@
 							'value' => '<strong>String</strong>, default <code>No Items Found</code>',
 							'description' => 'The message users sees if there are no items added yet in the list.',
 					),
+					'data-default-item' => array ( 
+							'value' => '<strong>Object</strong>, default <code>{}</code>',
+							'description' => 'The default list item values used in adding new item, <strong>Required</strong> when using <code>doT.js</code> template engine',
+					),
 					'data-values' => array ( 
-							'value' => '<strong>JSON</strong>, default <code>[]</code> empty Array',
+							'value' => '<strong>JSON</strong>, default <code>[]</code>',
 							'description' => 'Default values to fill the list with on start, <strong>JSON</strong> array object.',
 					),
 			);
@@ -122,9 +129,9 @@
 						<div class="table-responsive">
 							<table class="table table-bordered table-striped">
 								<colgroup>
-									<col class="col-xs-2">
 									<col class="col-xs-3">
-									<col class="col-xs-7">
+									<col class="col-xs-3">
+									<col class="col-xs-6">
 								</colgroup>
 								<thead>
 									<tr>
@@ -302,22 +309,73 @@ $data_json = htmlentities( json_encode( $data ) );
 			<section>
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">List With Multidimensional Data Array</h3>
+						<h3 class="panel-title">Array of Objects with <code>doT.js</code> Template</h3>
 					</div>
 					<div class="panel-body">
 						<form class="form-horizontal" role="form">
-							<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-values="[{&quot;name&quot;:&quot;Jeo Deo&quot;,&quot;email&quot;:&quot;jon.deo@mail.com&quot;},{&quot;name&quot;:&quot;Will Smith&quot;,&quot;email&quot;:&quot;will.smith@mail.com&quot;},{&quot;name&quot;:&quot;Sean Connery&quot;,&quot;email&quot;:&quot;sean.connery@mail.com&quot;}]">
+							<?php
+							$data_json = htmlentities( json_encode( array ( 
+									array ( 
+										'name' => 'Will Smith',
+										'email' => 'will.smith@mail.com',
+										'gender' => 'male',
+									),
+									array ( 
+										'name' => 'Emma Watson',
+										'email' => 'emma.watson@mail.com',
+										'gender' => 'female',
+									),
+									array ( 
+										'name' => 'Sean Connery',
+										'email' => 'sean.connery@mail.com',
+										'gender' => 'male',
+									),
+							) ) );
+
+							// default item required
+							$default_item_json = htmlentities( json_encode( array ( 
+									'name' => '',
+									'email' => '',
+									'gender' => '',
+							) ) );
+							?>
+							<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-default-item="<?php echo $default_item_json; ?>" data-values="<?php echo $data_json; ?>">
 								<li data-template="yes" class="list-item">
 									<div class="form-group">
 										<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
 										<div class="col-md-8">
-											<input type="email" class="form-control" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
+											<input type="email" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
 										<div class="col-md-8">
-											<input type="email" class="form-control" id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+											<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
+										<div class="col-md-8">
+											<div class="radio-inline">
+												<label>
+													{{ if( it.gender === 'male' ) { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
+													{{ } else { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
+													{{ } }}
+													Male
+												</label>
+											</div>
+											<div class="radio-inline">
+												<label>
+													{{ if( it.gender === 'female' ) { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
+													{{ } else { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
+													{{ } }}
+													Female
+												</label>
+											</div>
 										</div>
 										<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
 									</div>
@@ -330,7 +388,7 @@ $data_json = htmlentities( json_encode( $data ) );
 						<pre class="prettyprint"><?php echo htmlentities( '
 <!-- Data JSON -->
 <?php
-$data = array (
+$data_json = htmlentities( json_encode( array (
 	array (
 		"name" => "Jeo Deo",
 		"email" => "jon.deo@mail.com",
@@ -343,13 +401,17 @@ $data = array (
 		"name" => "Sean Connery",
 		"email" => "sean.connery@mail.com",
 	),
-);
+) ) );
 
-$data_json = htmlentities( json_encode( $data ) );
+$default_item_json = htmlentities( json_encode( array ( 
+		"name" => "",
+		"email" => "",
+		"gender" => "",
+) ) );
 ?>
 
 <!-- List -->
-<ul class="repeatable" data-confirm-remove="yes" data-values="<?php echo $data_json; ?>">
+<ul class="repeatable" data-confirm-remove="yes" data-default-item="<?php echo $default_item_json; ?>" data-values="<?php echo $data_json; ?>">
 	<li data-template="yes" class="list-item">
 		<div class="form-group">
 			<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
@@ -391,7 +453,7 @@ $data_json = htmlentities( json_encode( $data ) );
 					</div>
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-5">
 								<ul id="catch-events" class="list-unstyled repeatable" data-confirm-remove="yes">
 									<li data-template="yes">
 										<div class="row">
@@ -401,7 +463,7 @@ $data_json = htmlentities( json_encode( $data ) );
 									</li>
 								</ul>
 							</div>
-							<ul id="events-dump" class="col-md-4 col-md-offset-1"></ul>
+							<ul id="events-dump" class="col-md-5 col-md-offset-2"></ul>
 						</div>
 
 						<p class="page-header">Code :</p>
@@ -426,12 +488,11 @@ $data_json = htmlentities( json_encode( $data ) );
 ( function ( window ) {
 	jQuery( function( $ ) {
 		// First: listen for the events
-		$( \'#catch-events\' ).on( \'repeatable-init repeatable-completed repeatable-new-item repeatable-removed\', function( e ) {
-			$( \'#events-dump\' ).append( \'<li><p><code>\'+ e.type +\'</code> On <strong>\'+ e.timeStamp +\'</strong></p></li>\' );
-		} );
+		var event_date = new Date( e.timeStamp );
+		$( "#events-dump" ).append( "<li><p><code>"+ e.type +"</code> On <strong>"+ event_date.toDateString() +" "+ event_date.toLocaleTimeString( "en-us" ) +"</strong></p></li>" );
 
 		// Second: apply the plugin
-		$( \'.repeatable\' ).repeatable_item();
+		$( ".repeatable" ).repeatable_item();
 	});
 } )( window );
 </script>
@@ -455,10 +516,21 @@ $data_json = htmlentities( json_encode( $data ) );
 		<script>
 		( function ( window ) {
 			jQuery( function( $ ) {
+				// prettyPrint init
 				window.prettyPrint && prettyPrint();
+
+				// First: listen for the events
+				$( '#catch-events' ).on( 'repeatable-init repeatable-completed repeatable-new-item repeatable-removed', function( e ) {
+					var event_date = new Date( e.timeStamp );
+					$( '#events-dump' ).append( '<li><p><code>'+ e.type +'</code> On <strong>'+ event_date.toDateString() +' '+ event_date.toLocaleTimeString( 'en-us' ) +'</strong></p></li>' );
+				} );
+
+				// Second: apply the plugin
 				$( '.repeatable' ).repeatable_item();
 			} );
 		} )( window );
 		</script>
 	</body>
-</html>
+</html><?php 
+if ( $output )
+	file_put_contents( 'index.html', ob_get_flush() );
