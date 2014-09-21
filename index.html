@@ -8,8 +8,8 @@
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<link rel="stylesheet" href="css/prettify.min.css">
+		<link rel="stylesheet" href="css/showcase.min.css">
 		<!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -19,40 +19,105 @@
 
 	<body>
 		<div id="main-container" class="container">
-			<header>
-				<h1 class="page-header">jQuery Repeatable List Item</h1>
-			</header>
+			
+			<h1 class="page-header">jQuery Repeatable List Item</h1>
+			<p class="lead">Repeatable item with doT.js template engine</p>
 
-			<section class="downloads" class="clearfix">
+			<section class="downloads">
+				<a href="https://raw.githubusercontent.com/N-Molham/jquery.repeatable.item/master/js/dist/jquery.repeatable.item.min.js" class="btn btn-primary btn-lg">
+					<i class="fa fa-file-code-o fa-lg"></i> JS ( Minified )
+				</a>
+				&nbsp;
 				<a href="https://github.com/N-Molham/jquery.repeatable.item/zipball/master" class="btn btn-success btn-lg">
-					<i class="fa fa-file-archive-o"></i> Download .zip
+					<i class="fa fa-file-archive-o fa-lg"></i> Download .zip
 				</a>
-				<a href="https://github.com/N-Molham/jquery.repeatable.item/tarball/master" class="btn btn-success btn-lg">
-					<i class="fa fa-file-archive-o"></i> Download .tar.gz
-				</a>
+				&nbsp;
 				<a href="https://github.com/N-Molham/jquery.repeatable.item" class="btn btn-default btn-lg">
-					<i class="fa fa-github"></i> View on GitHub
+					<i class="fa fa-github fa-lg"></i> View on GitHub
 				</a>
-			</section><!-- .downloads -->
+			</section>
 
-			<section id="main_content">
-				<h3>
-					<a name="basic-usage" class="anchor" href="#basic-usage">
-						<span class="octicon octicon-link"></span>
-					</a>
-					Basic Usage
-				</h3>
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Full Options List ( Data Attributes )</h3>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<colgroup>
+									<col class="col-xs-3">
+									<col class="col-xs-3">
+									<col class="col-xs-6">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>Option</th>
+										<th>Value</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr><td><code>data-start-index</code></td><td><strong>Integer</strong>, default <code>0</code></td><td>The index to start counting from to put in the repeated template.</td></tr><tr><td><code>data-index-key-name</code></td><td><strong>String</strong>, default <code>index</code></td><td>The <code>{index key name}</code> placeholder used in the template replaced with index number.</td></tr><tr><td><code>data-value-key-name</code></td><td><strong>String</strong>, default <code>value</code></td><td>The <code>{value key name}</code> placeholder used in the template replaced with value.</td></tr><tr><td><code>data-add-button-label</code></td><td><strong>String</strong>, default <code>Add New</code></td><td>Add new item button label.</td></tr><tr><td><code>data-add-button-class</code></td><td><strong>String</strong>, default <code>btn btn-primary</code></td><td>Add button <code>class</code> attribute value.</td></tr><tr><td><code>data-wrapper-class</code></td><td><strong>String</strong>, default <code>repeatable-wrapper</code></td><td>Class name of the list wrapper <code>div</code>.</td></tr><tr><td><code>data-confirm-remove</code></td><td><code>yes</code> or <code>no</code>, default <code>no</code></td><td>Wither to confirm before removing item or not.</td></tr><tr><td><code>data-confirm-remove-message</code></td><td><strong>String</strong>, default <code>Are Your Sure ?</code></td><td>The message user sees to confirm.</td></tr><tr><td><code>data-empty-list-message</code></td><td><strong>String</strong>, default <code>No Items Found</code></td><td>The message users sees if there are no items added yet in the list.</td></tr><tr><td><code>data-default-item</code></td><td><strong>Object</strong>, default <code>{}</code></td><td>The default list item values used in adding new item, <strong>Required</strong> when using <code>doT.js</code> template engine</td></tr><tr><td><code>data-values</code></td><td><strong>JSON</strong>, default <code>[]</code></td><td>Default values to fill the list with on start, <strong>JSON</strong> array object.</td></tr>								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
 
-				<p>The basic usage is to create list and an item which will be marked as the template item</p>
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Events</h3>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped">
+								<colgroup>
+									<col class="col-xs-2">
+									<col class="col-xs-4">
+									<col class="col-xs-6">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>Event</th>
+										<th>Parameters</th>
+										<th>Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr><td><code>repeatable-init</code></td><td><ul><li><p>None</p></li></ul></td><td>Triggers when the list is initializing.</td></tr><tr><td><code>repeatable-completed</code></td><td><ul><li><p>The list jQuery element</p></li></ul></td><td>Triggers when the list is initialized and ready.</td></tr><tr><td><code>repeatable-new-item</code></td><td><ul><li><p>The list jQuery element</p></li><li><p>The new item jQuery element added to the list</p></li><li><p>The index replaced the <code>{index}</code> placeholder</p></li><li><p>The data object that parsed to replace the corresponding placeholders</p></li></ul></td><td>Triggers when the a new item added to the list.</td></tr><tr><td><code>repeatable-removed</code></td><td><ul><li><p>The list jQuery element</p></li><li><p>The remove item jQuery element</p></li></ul></td><td>Triggers when an item removed from the list.</td></tr>								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
 
-				<pre><code>&lt;!-- Empty list html entities --&gt;
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Simple List</h3>
+					</div>
+					<div class="panel-body">
+						<ul class="list-unstyled repeatable" data-empty-list-message="&lt;p class=&quot;alert alert-info&quot;&gt;No Items Yet&lt;/p&gt;">
+							<li data-template="yes" class="list-item">
+								<div class="row">
+									<p class="col-md-10"><input type="text" name="input[{index}]" placeholder="Input Label" class="form-control" /></p>
+									<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+								</div>
+							</li>
+						</ul>
+			
+						<p class="page-header">Code :</p>
+						<pre class="prettyprint">
+&lt;!-- Empty list html entities --&gt;
 &lt;?php 
-$empty_msg = &quot;No Items Yet&quot;;
+$empty_msg = 'No Items Yet';
 ?&gt;
 
 &lt;!-- If you want HTML content as the empty message, just escape HTML entities, ex: in PHP --&gt;
 &lt;?php 
-$empty_msg = htmlentities( &quot;&lt;p class=&quot;alert alert-info&quot;&gt;No Items Yet&lt;/p&gt;&quot; );
+$empty_msg = htmlentities( '&lt;p class=&quot;alert alert-info&quot;&gt;No Items Yet&lt;/p&gt;' );
 ?&gt;
 
 &lt;!-- List --&gt;
@@ -71,12 +136,237 @@ $empty_msg = htmlentities( &quot;&lt;p class=&quot;alert alert-info&quot;&gt;No 
 &lt;script&gt;
 ( function ( window ) {
 	jQuery( function( $ ) {
+		$( '.repeatable' ).repeatable_item();
+	});
+} )( window );
+&lt;/script&gt;
+						</pre>
+					</div>
+				</div>
+			</section>
+			
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">List With Data Array</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+							<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-values="{&quot;1&quot;:&quot;jon.deo@mail.com&quot;,&quot;3&quot;:&quot;will.smith@mail.com&quot;,&quot;5&quot;:&quot;sean.connery@mail.com&quot;}">
+								<li data-template="yes" class="list-item">
+									<div class="row">
+										<p class="col-md-10"><input type="email" name="input[{index}]" placeholder="Email" class="form-control" value="{value}" /></p>
+										<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+									</div>
+								</li>
+							</ul>
+						</form>
+			
+						<p class="page-header">Code :</p>
+						<pre class="prettyprint">
+&lt;!-- Data JSON --&gt;
+&lt;?php
+$data = array (
+	1 =&gt; &quot;jon.deo@mail.com&quot;,
+	3 =&gt; &quot;will.smith@mail.com&quot;,
+	5 =&gt; &quot;sean.connery@mail.com&quot;,
+);
+
+$data_json = htmlentities( json_encode( $data ) );
+?&gt;
+
+&lt;!-- List --&gt;
+&lt;ul class=&quot;repeatable&quot; data-confirm-remove=&quot;yes&quot; data-values=&quot;&lt;?php echo $data_json; ?&gt;&quot;&gt;
+	&lt;li data-template=&quot;yes&quot; class=&quot;list-item&quot;&gt;
+		&lt;div class=&quot;row&quot;&gt;
+			&lt;p class=&quot;col-md-10&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;input[{index}]&quot; placeholder=&quot;Input Label&quot; class=&quot;form-control&quot; value=&quot;{value}&quot; /&gt;&lt;/p&gt;
+			&lt;p class=&quot;col-md-2&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;btn btn-default&quot; data-remove=&quot;yes&quot;&gt;Remove&lt;/a&gt;&lt;/p&gt;
+		&lt;/div&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- jQuery --&gt;
+&lt;script src=&quot;js/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;js/jquery.repeatable.item.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+( function ( window ) {
+	jQuery( function( $ ) {
+		$( '.repeatable' ).repeatable_item();
+	});
+} )( window );
+&lt;/script&gt;
+						</pre>
+					</div>
+				</div>
+			</section>
+			
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Array of Objects with <code>doT.js</code> Template</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+														<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-default-item="{&quot;name&quot;:&quot;&quot;,&quot;email&quot;:&quot;&quot;,&quot;gender&quot;:&quot;&quot;}" data-values="[{&quot;name&quot;:&quot;Will Smith&quot;,&quot;email&quot;:&quot;will.smith@mail.com&quot;,&quot;gender&quot;:&quot;male&quot;},{&quot;name&quot;:&quot;Emma Watson&quot;,&quot;email&quot;:&quot;emma.watson@mail.com&quot;,&quot;gender&quot;:&quot;female&quot;},{&quot;name&quot;:&quot;Sean Connery&quot;,&quot;email&quot;:&quot;sean.connery@mail.com&quot;,&quot;gender&quot;:&quot;male&quot;}]">
+								<li data-template="yes" class="list-item">
+									<div class="form-group">
+										<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
+										<div class="col-md-8">
+											<input type="email" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
+										<div class="col-md-8">
+											<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
+										<div class="col-md-8">
+											<div class="radio-inline">
+												<label>
+													{{ if( it.gender === 'male' ) { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
+													{{ } else { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
+													{{ } }}
+													Male
+												</label>
+											</div>
+											<div class="radio-inline">
+												<label>
+													{{ if( it.gender === 'female' ) { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
+													{{ } else { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
+													{{ } }}
+													Female
+												</label>
+											</div>
+										</div>
+										<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+									</div>
+									<hr class="divider" />
+								</li>
+							</ul>
+						</form>
+			
+						<p class="page-header">Code :</p>
+						<pre class="prettyprint">
+&lt;!-- Data JSON --&gt;
+&lt;?php
+$data_json = htmlentities( json_encode( array (
+	array (
+		&quot;name&quot; =&gt; &quot;Jeo Deo&quot;,
+		&quot;email&quot; =&gt; &quot;jon.deo@mail.com&quot;,
+	),
+	array (
+		&quot;name&quot; =&gt; &quot;Will Smith&quot;,
+		&quot;email&quot; =&gt; &quot;will.smith@mail.com&quot;,
+	),
+	array (
+		&quot;name&quot; =&gt; &quot;Sean Connery&quot;,
+		&quot;email&quot; =&gt; &quot;sean.connery@mail.com&quot;,
+	),
+) ) );
+
+$default_item_json = htmlentities( json_encode( array ( 
+		&quot;name&quot; =&gt; &quot;&quot;,
+		&quot;email&quot; =&gt; &quot;&quot;,
+		&quot;gender&quot; =&gt; &quot;&quot;,
+) ) );
+?&gt;
+
+&lt;!-- List --&gt;
+&lt;ul class=&quot;repeatable&quot; data-confirm-remove=&quot;yes&quot; data-default-item=&quot;&lt;?php echo $default_item_json; ?&gt;&quot; data-values=&quot;&lt;?php echo $data_json; ?&gt;&quot;&gt;
+	&lt;li data-template=&quot;yes&quot; class=&quot;list-item&quot;&gt;
+		&lt;div class=&quot;form-group&quot;&gt;
+			&lt;label for=&quot;user[{index}][name]&quot; class=&quot;col-md-2 control-label&quot;&gt;Name&lt;/label&gt;
+			&lt;div class=&quot;col-md-8&quot;&gt;
+				&lt;input type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;user[{index}][name]&quot; placeholder=&quot;Name&quot; value=&quot;{name}&quot; /&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class=&quot;form-group&quot;&gt;
+			&lt;label for=&quot;user[{index}][email]&quot; class=&quot;col-md-2 control-label&quot;&gt;Email&lt;/label&gt;
+			&lt;div class=&quot;col-md-8&quot;&gt;
+				&lt;input type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;user[{index}][email]&quot; placeholder=&quot;Email&quot; value=&quot;{email}&quot; /&gt;
+			&lt;/div&gt;
+			&lt;p class=&quot;col-md-2&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;btn btn-default&quot; data-remove=&quot;yes&quot;&gt;Remove&lt;/a&gt;&lt;/p&gt;
+		&lt;/div&gt;
+		&lt;hr class=&quot;divider&quot; /&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- jQuery --&gt;
+&lt;script src=&quot;js/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;js/jquery.repeatable.item.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+( function ( window ) {
+	jQuery( function( $ ) {
+		$( '.repeatable' ).repeatable_item();
+	});
+} )( window );
+&lt;/script&gt;
+						</pre>
+					</div>
+				</div>
+			</section>
+			
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Events Dump</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-5">
+								<ul id="catch-events" class="list-unstyled repeatable" data-confirm-remove="yes">
+									<li data-template="yes">
+										<div class="row">
+											<p class="col-md-10"><input type="text" name="input[{index}]" placeholder="Input Label" class="form-control" /></p>
+											<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<ul id="events-dump" class="col-md-5 col-md-offset-2"></ul>
+						</div>
+
+						<p class="page-header">Code :</p>
+						<pre class="prettyprint">
+&lt;!-- List --&gt;
+&lt;ul id=&quot;catch-events&quot; class=&quot;list-unstyled repeatable&quot; data-confirm-remove=&quot;yes&quot;&gt;
+	&lt;li data-template=&quot;yes&quot;&gt;
+		&lt;div class=&quot;row&quot;&gt;
+			&lt;p class=&quot;col-md-10&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;input[{index}]&quot; placeholder=&quot;Input Label&quot; class=&quot;form-control&quot; /&gt;&lt;/p&gt;
+			&lt;p class=&quot;col-md-2&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;btn btn-default&quot; data-remove=&quot;yes&quot;&gt;Remove&lt;/a&gt;&lt;/p&gt;
+		&lt;/div&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Event List to display it --&gt;
+&lt;ul id=&quot;events-dump&quot;&gt;&lt;/ul&gt;
+
+&lt;!-- jQuery --&gt;
+&lt;script src=&quot;js/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;js/jquery.repeatable.item.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+( function ( window ) {
+	jQuery( function( $ ) {
+		// First: listen for the events
+		var event_date = new Date( e.timeStamp );
+		$( &quot;#events-dump&quot; ).append( &quot;&lt;li&gt;&lt;p&gt;&lt;code&gt;&quot;+ e.type +&quot;&lt;/code&gt; On &lt;strong&gt;&quot;+ event_date.toDateString() +&quot; &quot;+ event_date.toLocaleTimeString( &quot;en-us&quot; ) +&quot;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;&quot; );
+
+		// Second: apply the plugin
 		$( &quot;.repeatable&quot; ).repeatable_item();
 	});
 } )( window );
-</code></pre>
-
-			</section><!-- #main_content -->
+&lt;/script&gt;
+						</pre>
+					</div>
+				</div>
+			</section>
 
 			<footer>
 				jQuery Repeatable List Item is maintained by <a href="https://github.com/N-Molham">N-Molham</a><br>
@@ -84,7 +374,27 @@ $empty_msg = htmlentities( &quot;&lt;p class=&quot;alert alert-info&quot;&gt;No 
 		</div><!-- #main-container -->
 
 		<!-- Scripts -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/prettify.js"></script>
+		<script src="bower_components/doT/doT.min.js"></script>
+		<script src="js/jquery.repeatable.item.min.js"></script>
+		<script>
+		( function ( window ) {
+			jQuery( function( $ ) {
+				// prettyPrint init
+				window.prettyPrint && prettyPrint();
+
+				// First: listen for the events
+				$( '#catch-events' ).on( 'repeatable-init repeatable-completed repeatable-new-item repeatable-removed', function( e ) {
+					var event_date = new Date( e.timeStamp );
+					$( '#events-dump' ).append( '<li><p><code>'+ e.type +'</code> On <strong>'+ event_date.toDateString() +' '+ event_date.toLocaleTimeString( 'en-us' ) +'</strong></p></li>' );
+				} );
+
+				// Second: apply the plugin
+				$( '.repeatable' ).repeatable_item();
+			} );
+		} )( window );
+		</script>
 	</body>
 </html>
