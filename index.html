@@ -207,7 +207,7 @@ $data_json = htmlentities( json_encode( $data ) );
 					</div>
 					<div class="panel-body">
 						<form class="form-horizontal" role="form">
-														<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-default-item="{&quot;name&quot;:&quot;&quot;,&quot;email&quot;:&quot;&quot;,&quot;gender&quot;:&quot;&quot;}" data-values="[{&quot;name&quot;:&quot;Will Smith&quot;,&quot;email&quot;:&quot;will.smith@mail.com&quot;,&quot;gender&quot;:&quot;male&quot;},{&quot;name&quot;:&quot;Emma Watson&quot;,&quot;email&quot;:&quot;emma.watson@mail.com&quot;,&quot;gender&quot;:&quot;female&quot;},{&quot;name&quot;:&quot;Sean Connery&quot;,&quot;email&quot;:&quot;sean.connery@mail.com&quot;,&quot;gender&quot;:&quot;male&quot;}]">
+							<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-default-item="{&quot;name&quot;:&quot;&quot;,&quot;email&quot;:&quot;&quot;,&quot;gender&quot;:&quot;&quot;}" data-values="[{&quot;name&quot;:&quot;Will Smith&quot;,&quot;email&quot;:&quot;will.smith@mail.com&quot;,&quot;gender&quot;:&quot;male&quot;},{&quot;name&quot;:&quot;Emma Watson&quot;,&quot;email&quot;:&quot;emma.watson@mail.com&quot;,&quot;gender&quot;:&quot;female&quot;},{&quot;name&quot;:&quot;Sean Connery&quot;,&quot;email&quot;:&quot;sean.connery@mail.com&quot;,&quot;gender&quot;:&quot;male&quot;}]">
 								<li data-template="yes" class="list-item">
 									<div class="form-group">
 										<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
@@ -258,16 +258,19 @@ $data_json = htmlentities( json_encode( $data ) );
 &lt;?php
 $data_json = htmlentities( json_encode( array (
 	array (
-		&quot;name&quot; =&gt; &quot;Jeo Deo&quot;,
-		&quot;email&quot; =&gt; &quot;jon.deo@mail.com&quot;,
-	),
-	array (
 		&quot;name&quot; =&gt; &quot;Will Smith&quot;,
 		&quot;email&quot; =&gt; &quot;will.smith@mail.com&quot;,
+		&quot;gender&quot; =&gt; &quot;male&quot;,
+	),
+	array (
+		&quot;name&quot; =&gt; &quot;Emma Watson&quot;,
+		&quot;email&quot; =&gt; &quot;emma.watson@mail.com&quot;,
+		&quot;gender&quot; =&gt; &quot;female&quot;,
 	),
 	array (
 		&quot;name&quot; =&gt; &quot;Sean Connery&quot;,
 		&quot;email&quot; =&gt; &quot;sean.connery@mail.com&quot;,
+		&quot;gender&quot; =&gt; &quot;male&quot;,
 	),
 ) ) );
 
@@ -284,13 +287,40 @@ $default_item_json = htmlentities( json_encode( array (
 		&lt;div class=&quot;form-group&quot;&gt;
 			&lt;label for=&quot;user[{index}][name]&quot; class=&quot;col-md-2 control-label&quot;&gt;Name&lt;/label&gt;
 			&lt;div class=&quot;col-md-8&quot;&gt;
-				&lt;input type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;user[{index}][name]&quot; placeholder=&quot;Name&quot; value=&quot;{name}&quot; /&gt;
+				&lt;input type=&quot;email&quot; class=&quot;form-control&quot; name=&quot;user[{index}][name]&quot; id=&quot;user[{index}][name]&quot;
+							placeholder=&quot;Name&quot; value=&quot;{{=it.name}}&quot; /&gt;
 			&lt;/div&gt;
 		&lt;/div&gt;
 		&lt;div class=&quot;form-group&quot;&gt;
 			&lt;label for=&quot;user[{index}][email]&quot; class=&quot;col-md-2 control-label&quot;&gt;Email&lt;/label&gt;
 			&lt;div class=&quot;col-md-8&quot;&gt;
-				&lt;input type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;user[{index}][email]&quot; placeholder=&quot;Email&quot; value=&quot;{email}&quot; /&gt;
+				&lt;input type=&quot;email&quot; class=&quot;form-control&quot;name=&quot;user[{index}][email]&quot; id=&quot;user[{index}][email]&quot;
+							placeholder=&quot;Email&quot; value=&quot;{{=it.email}}&quot; /&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class=&quot;form-group&quot;&gt;
+			&lt;label for=&quot;user[{index}][gender]&quot; class=&quot;col-md-2 control-label&quot;&gt;Gender&lt;/label&gt;
+			&lt;div class=&quot;col-md-8&quot;&gt;
+				&lt;div class=&quot;radio-inline&quot;&gt;
+					&lt;label&gt;
+						{{ if( it.gender === 'male' ) { }}
+						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;male&quot; checked=&quot;checked&quot; /&gt;
+						{{ } else { }}
+						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;male&quot; /&gt;
+						{{ } }}
+						Male
+					&lt;/label&gt;
+				&lt;/div&gt;
+				&lt;div class=&quot;radio-inline&quot;&gt;
+					&lt;label&gt;
+						{{ if( it.gender === 'female' ) { }}
+						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;female&quot; checked=&quot;checked&quot; /&gt;
+						{{ } else { }}
+						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;female&quot; /&gt;
+						{{ } }}
+						Female
+					&lt;/label&gt;
+				&lt;/div&gt;
 			&lt;/div&gt;
 			&lt;p class=&quot;col-md-2&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;btn btn-default&quot; data-remove=&quot;yes&quot;&gt;Remove&lt;/a&gt;&lt;/p&gt;
 		&lt;/div&gt;
