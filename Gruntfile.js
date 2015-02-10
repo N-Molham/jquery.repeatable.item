@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 			},
 			 my_target: {
 				files: {
-					'js/dist/jquery.repeatable.item.min.js': 'js/src/jquery.repeatable.item.js',
+					'js/dist/jquery.repeatable.item.min.js': 'js/src/jquery.repeatable.item.js'
 				}
 			}
 		},

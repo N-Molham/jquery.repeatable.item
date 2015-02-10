@@ -344,7 +344,7 @@ $data_json = htmlentities( json_encode( $data ) );
 									<div class="form-group">
 										<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
 										<div class="col-md-8">
-											<input type="email" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
+											<input type="text" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -389,21 +389,25 @@ $data_json = htmlentities( json_encode( $data ) );
 <!-- Data JSON -->
 <?php
 $data_json = htmlentities( json_encode( array (
-	array (
-		"name" => "Jeo Deo",
-		"email" => "jon.deo@mail.com",
-	),
-	array (
-		"name" => "Will Smith",
-		"email" => "will.smith@mail.com",
-	),
-	array (
-		"name" => "Sean Connery",
-		"email" => "sean.connery@mail.com",
-	),
+		array (
+			"name" => "Will Smith",
+			"email" => "will.smith@mail.com",
+			"gender" => "male",
+		),
+		array (
+			"name" => "Emma Watson",
+			"email" => "emma.watson@mail.com",
+			"gender" => "female",
+		),
+		array (
+			"name" => "Sean Connery",
+			"email" => "sean.connery@mail.com",
+			"gender" => "male",
+		),
 ) ) );
 
-$default_item_json = htmlentities( json_encode( array ( 
+// default item required
+$default_item_json = htmlentities( json_encode( array (
 		"name" => "",
 		"email" => "",
 		"gender" => "",
@@ -416,13 +420,38 @@ $default_item_json = htmlentities( json_encode( array (
 		<div class="form-group">
 			<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
 			<div class="col-md-8">
-				<input type="email" class="form-control" id="user[{index}][name]" placeholder="Name" value="{name}" />
+				<input type="text" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
 			<div class="col-md-8">
-				<input type="email" class="form-control" id="user[{index}][email]" placeholder="Email" value="{email}" />
+				<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
+			<div class="col-md-8">
+				<div class="radio-inline">
+					<label>
+						{{ if( it.gender === \'male\' ) { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
+						{{ } else { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
+						{{ } }}
+						Male
+					</label>
+				</div>
+				<div class="radio-inline">
+					<label>
+						{{ if( it.gender === \'female\' ) { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
+						{{ } else { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
+						{{ } }}
+						Female
+					</label>
+				</div>
 			</div>
 			<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
 		</div>
@@ -445,7 +474,179 @@ $default_item_json = htmlentities( json_encode( array (
 					</div>
 				</div>
 			</section>
-			
+
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Using <code>script</code> template tag attribute</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+							<?php
+							$data_json = htmlentities( json_encode( array (
+									array (
+										'name' => 'Will Smith',
+										'email' => 'will.smith@mail.com',
+										'gender' => 'male',
+									),
+									array (
+										'name' => 'Emma Watson',
+										'email' => 'emma.watson@mail.com',
+										'gender' => 'female',
+									),
+									array (
+										'name' => 'Sean Connery',
+										'email' => 'sean.connery@mail.com',
+										'gender' => 'male',
+									),
+							) ) );
+
+							// default item required
+							$default_item_json = htmlentities( json_encode( array (
+									'name' => '',
+									'email' => '',
+									'gender' => '',
+							) ) );
+							?>
+
+							<script type="text/template" id="item-template">
+							<li class="list-item">
+								<div class="form-group">
+									<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
+									<div class="col-md-8">
+										<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
+									<div class="col-md-8">
+										<div class="radio-inline">
+											<label>
+												{{ if( it.gender === 'male' ) { }}
+												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
+												{{ } else { }}
+												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
+												{{ } }}
+												Male
+											</label>
+										</div>
+										<div class="radio-inline">
+											<label>
+												{{ if( it.gender === 'female' ) { }}
+												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
+												{{ } else { }}
+												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
+												{{ } }}
+												Female
+											</label>
+										</div>
+									</div>
+									<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+								</div>
+								<hr class="divider" />
+							</li>
+							</script>
+
+							<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-template-selector="#item-template" data-default-item="<?php echo $default_item_json; ?>" data-values="<?php echo $data_json; ?>"></ul>
+						</form>
+
+						<p class="page-header">Code :</p>
+						<pre class="prettyprint"><?php echo htmlentities( '
+<!-- Data JSON -->
+<?php
+$data_json = htmlentities( json_encode( array (
+		array (
+			"name" => "Will Smith",
+			"email" => "will.smith@mail.com",
+			"gender" => "male",
+		),
+		array (
+			"name" => "Emma Watson",
+			"email" => "emma.watson@mail.com",
+			"gender" => "female",
+		),
+		array (
+			"name" => "Sean Connery",
+			"email" => "sean.connery@mail.com",
+			"gender" => "male",
+		),
+) ) );
+
+// default item required
+$default_item_json = htmlentities( json_encode( array (
+		"name" => "",
+		"email" => "",
+		"gender" => "",
+) ) );
+?>
+
+<!-- List -->
+<ul class="repeatable" data-confirm-remove="yes" data-default-item="<?php echo $default_item_json; ?>" data-values="<?php echo $data_json; ?>">
+	<li data-template="yes" class="list-item">
+		<div class="form-group">
+			<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
+			<div class="col-md-8">
+				<input type="email" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
+			<div class="col-md-8">
+				<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
+			<div class="col-md-8">
+				<div class="radio-inline">
+					<label>
+						{{ if( it.gender === \'male\' ) { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
+						{{ } else { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
+						{{ } }}
+						Male
+					</label>
+				</div>
+				<div class="radio-inline">
+					<label>
+						{{ if( it.gender === \'female\' ) { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
+						{{ } else { }}
+						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
+						{{ } }}
+						Female
+					</label>
+				</div>
+			</div>
+			<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+		</div>
+		<hr class="divider" />
+	</li>
+</ul>
+
+<!-- jQuery -->
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.repeatable.item.js"></script>
+<script>
+( function ( window ) {
+	jQuery( function( $ ) {
+		$( \'.repeatable\' ).repeatable_item();
+	});
+} )( window );
+</script>
+' ); ?>
+						</pre>
+					</div>
+				</div>
+			</section>
+
 			<section>
 				<div class="panel panel-primary">
 					<div class="panel-heading">

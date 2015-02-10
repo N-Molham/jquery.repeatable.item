@@ -1,9 +1,11 @@
 /*!
- * Repeatable list item 1.5.0 (http://n-molham.github.io/jquery.repeatable.item/)
+ * Repeatable list item 1.6.0 (http://n-molham.github.io/jquery.repeatable.item/)
  * Copyright 2014 Nabeel Molham (http://nabeel.molham.me).
  * Licensed under MIT License (http://opensource.org/licenses/MIT)
  */
-( function ( window ) {
+( function ( win ) {
+	"use strict";
+
 	jQuery( function( $ ) {
 		$.fn.repeatable_item = function( events ) {
 			// check if doT.js template engine is available
@@ -16,7 +18,7 @@
 				init: function() {},
 				completed: function() {},
 				new_item: function() {},
-				removed: function() {},
+				removed: function() {}
 			}, events );
 
 			// plugins methods
@@ -24,8 +26,8 @@
 					/**
 					 * Clean final item layout from placeholders
 					 * 
-					 * @param string layout
-					 * @return string
+					 * @param {string} layout
+					 * @return {string}
 					 */
 					clean_template_holders: function( layout ) {
 						// index/value cleanup
@@ -45,27 +47,26 @@
 					/**
 					 * Add new list item
 					 * 
-					 * @param object $list
-					 * @param integer index
-					 * @param mixed data
+					 * @param {Object} $list
+					 * @param {Number} index
+					 * @param {any} data
 					 * @return void
 					 */
 					add_item: function( $list, index, data ) {
+						data = data || false;
+
 						// check empty item
 						if ( $list.settings.is_empty ) {
 							$list.settings.is_empty = false;
 							$list.find( '.repeatable-empty' ).remove();
 						}
 
-						// create clone
-						var $new_item = $list.item_template.clone();
-
 						// add new index
-						var item_content = $new_item.html();
+						var item_content;
 
 						// check data
 						switch( typeof data ) {
-							case 'undefined':
+							case 'boolean':
 								item_content = $list.item_template_dot( $list.settings.defaultItem );
 								break;
 
@@ -75,7 +76,8 @@
 								break;
 
 							default:
-								item_content = item_content.replace( new RegExp( '{'+ $list.settings.valueKeyName +'}', 'g' ), data );
+								// fill in with value
+								item_content =  $list.item_template.html().replace( new RegExp( '{'+ $list.settings.valueKeyName +'}', 'g' ), data );
 								break;
 						}
 
@@ -83,10 +85,10 @@
 						item_content = item_content.replace( new RegExp( '{'+ $list.settings.indexKeyName +'}', 'g' ), index );
 
 						// clear placeholder left overs
-						item_content = this.clean_template_holders( item_content );
+						item_content = methods.clean_template_holders( item_content );
 
 						// replace HTML and append to list
-						$new_item.html( item_content ).appendTo( $list );
+						var $new_item = $( item_content ).appendTo( $list );
 
 						// index increment
 						$list.settings.startIndex = parseInt( index ) + 1;
@@ -100,7 +102,7 @@
 			// element loop
 			this.each( function( index, element ) {
 				var $list = $( element );
-				
+
 				// trigger event: initialize
 				$list.trigger( 'repeatable-init' );
 				events.init( $list );
@@ -108,6 +110,7 @@
 				// settings
 				$list.settings = $.extend( {
 					startIndex: 0,
+					templateSelector: '',
 					indexKeyName: 'index',
 					valueKeyName: 'value',
 					addButtonLabel: 'Add New',
@@ -128,8 +131,16 @@
 				$list.settings.startIndex = parseInt( $list.settings.startIndex );
 				
 				// repeatable item template
-				$list.item_template = $list.find( '> [data-template=yes]' ).removeAttr( 'data-template' ).remove();
-				if ( $list.item_template.length !== 1 ) {
+				if ( $list.settings.templateSelector == '' ) {
+					// use internal template
+					$list.item_template = $list.find( '> [data-template=yes]' ).removeAttr( 'data-template' ).remove();
+				} else {
+					// use external template from query selector
+					$list.item_template = $( $( $list.settings.templateSelector ).html() );
+				}
+
+
+				if ( $list.item_template.size() !== 1 ) {
 					// throw exception cause the template item not set
 					throw 'Repeatable Exception: Template item not found.';
 				}
@@ -212,7 +223,11 @@
 		};
 
 		if ( !$.fn.outerHTML ) {
-			// get element whole HTML layout
+			/**
+			 * Get element whole HTML layout
+			 *
+			 * @returns {*|jQuery}
+			 */
 			$.fn.outerHTML = function() {
 				return $( '<div />' ).append( this.eq(0).clone() ).html();
 			};
