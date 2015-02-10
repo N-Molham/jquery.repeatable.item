@@ -15,8 +15,8 @@ if ( $output )
 		<link rel="stylesheet" href="css/prettify.min.css">
 		<link rel="stylesheet" href="css/showcase.min.css">
 		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 		<title>jQuery Repeatable List Item by N-Molham</title>
 	</head>
@@ -37,7 +37,11 @@ if ( $output )
 							'value' => '<strong>String</strong>, default <code>value</code>',
 							'description' => 'The <code>{value key name}</code> placeholder used in the template replaced with value.',
 					),
-					'data-add-button-label' => array ( 
+					'data-template-selector' => array (
+							'value' => '<strong>String</strong>, default <code>empty string</code>',
+							'description' => 'The query selector for the script template container <code>script[type="text/template"]</code>.',
+					),
+					'data-add-button-label' => array (
 							'value' => '<strong>String</strong>, default <code>Add New</code>',
 							'description' => 'Add new item button label.',
 					),
@@ -586,50 +590,53 @@ $default_item_json = htmlentities( json_encode( array (
 ) ) );
 ?>
 
-<!-- List -->
-<ul class="repeatable" data-confirm-remove="yes" data-default-item="<?php echo $default_item_json; ?>" data-values="<?php echo $data_json; ?>">
-	<li data-template="yes" class="list-item">
-		<div class="form-group">
-			<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
-			<div class="col-md-8">
-				<input type="email" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
+<!-- template -->
+<script type="text/template" id="item-template">
+<li class="list-item">
+	<div class="form-group">
+		<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
+		<div class="col-md-8">
+			<input type="text" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
+		<div class="col-md-8">
+			<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
+		<div class="col-md-8">
+			<div class="radio-inline">
+				<label>
+					{{ if( it.gender === "male" ) { }}
+					<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
+					{{ } else { }}
+					<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
+					{{ } }}
+					Male
+				</label>
+			</div>
+			<div class="radio-inline">
+				<label>
+					{{ if( it.gender === "female" ) { }}
+					<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
+					{{ } else { }}
+					<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
+					{{ } }}
+					Female
+				</label>
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
-			<div class="col-md-8">
-				<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
-			<div class="col-md-8">
-				<div class="radio-inline">
-					<label>
-						{{ if( it.gender === \'male\' ) { }}
-						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
-						{{ } else { }}
-						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
-						{{ } }}
-						Male
-					</label>
-				</div>
-				<div class="radio-inline">
-					<label>
-						{{ if( it.gender === \'female\' ) { }}
-						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
-						{{ } else { }}
-						<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
-						{{ } }}
-						Female
-					</label>
-				</div>
-			</div>
-			<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
-		</div>
-		<hr class="divider" />
-	</li>
-</ul>
+		<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+	</div>
+	<hr class="divider" />
+</li>
+</script>
+
+<!-- list -->
+<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-template-selector="#item-template" data-default-item="<?php echo $default_item_json; ?>" data-values="<?php echo $data_json; ?>"></ul>
 
 <!-- jQuery -->
 <script src="js/jquery.min.js"></script>
@@ -709,11 +716,11 @@ $default_item_json = htmlentities( json_encode( array (
 		</div><!-- #main-container -->
 
 		<!-- Scripts -->
-		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="<?php echo $output ? 'js/jquery.min.js' : 'bower_components/jquery/dist/jquery.min.js'; ?>"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script src="js/prettify.js"></script>
-		<script src="bower_components/doT/doT.min.js"></script>
-		<script src="js/src/jquery.repeatable.item.js"></script>
+		<script src="<?php echo $output ? 'js/doT.min.js' : 'bower_components/doT/doT.min.js'; ?>"></script>
+		<script src="<?php echo $output ? 'js/jquery.repeatable.item.min.js' : 'js/src/jquery.repeatable.item.js'; ?>"></script>
 		<script>
 		( function ( window ) {
 			jQuery( function( $ ) {
