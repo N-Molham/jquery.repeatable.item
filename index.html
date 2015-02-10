@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,7 +58,7 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr><td><code>data-start-index</code></td><td><strong>Integer</strong>, default <code>0</code></td><td>The index to start counting from to put in the repeated template.</td></tr><tr><td><code>data-index-key-name</code></td><td><strong>String</strong>, default <code>index</code></td><td>The <code>{index key name}</code> placeholder used in the template replaced with index number.</td></tr><tr><td><code>data-value-key-name</code></td><td><strong>String</strong>, default <code>value</code></td><td>The <code>{value key name}</code> placeholder used in the template replaced with value.</td></tr><tr><td><code>data-add-button-label</code></td><td><strong>String</strong>, default <code>Add New</code></td><td>Add new item button label.</td></tr><tr><td><code>data-add-button-class</code></td><td><strong>String</strong>, default <code>btn btn-primary</code></td><td>Add button <code>class</code> attribute value.</td></tr><tr><td><code>data-wrapper-class</code></td><td><strong>String</strong>, default <code>repeatable-wrapper</code></td><td>Class name of the list wrapper <code>div</code>.</td></tr><tr><td><code>data-confirm-remove</code></td><td><code>yes</code> or <code>no</code>, default <code>no</code></td><td>Wither to confirm before removing item or not.</td></tr><tr><td><code>data-confirm-remove-message</code></td><td><strong>String</strong>, default <code>Are Your Sure ?</code></td><td>The message user sees to confirm.</td></tr><tr><td><code>data-empty-list-message</code></td><td><strong>String</strong>, default <code>No Items Found</code></td><td>The message users sees if there are no items added yet in the list.</td></tr><tr><td><code>data-default-item</code></td><td><strong>Object</strong>, default <code>{}</code></td><td>The default list item values used in adding new item, <strong>Required</strong> when using <code>doT.js</code> template engine</td></tr><tr><td><code>data-values</code></td><td><strong>JSON</strong>, default <code>[]</code></td><td>Default values to fill the list with on start, <strong>JSON</strong> array object.</td></tr>								</tbody>
+						<tr><td><code>data-start-index</code></td><td><strong>Integer</strong>, default <code>0</code></td><td>The index to start counting from to put in the repeated template.</td></tr><tr><td><code>data-index-key-name</code></td><td><strong>String</strong>, default <code>index</code></td><td>The <code>{index key name}</code> placeholder used in the template replaced with index number.</td></tr><tr><td><code>data-value-key-name</code></td><td><strong>String</strong>, default <code>value</code></td><td>The <code>{value key name}</code> placeholder used in the template replaced with value.</td></tr><tr><td><code>data-template-selector</code></td><td><strong>String</strong>, default <code>empty string</code></td><td>The query selector for the script template container <code>script[type="text/template"]</code>.</td></tr><tr><td><code>data-add-button-label</code></td><td><strong>String</strong>, default <code>Add New</code></td><td>Add new item button label.</td></tr><tr><td><code>data-add-button-class</code></td><td><strong>String</strong>, default <code>btn btn-primary</code></td><td>Add button <code>class</code> attribute value.</td></tr><tr><td><code>data-wrapper-class</code></td><td><strong>String</strong>, default <code>repeatable-wrapper</code></td><td>Class name of the list wrapper <code>div</code>.</td></tr><tr><td><code>data-confirm-remove</code></td><td><code>yes</code> or <code>no</code>, default <code>no</code></td><td>Wither to confirm before removing item or not.</td></tr><tr><td><code>data-confirm-remove-message</code></td><td><strong>String</strong>, default <code>Are Your Sure ?</code></td><td>The message user sees to confirm.</td></tr><tr><td><code>data-empty-list-message</code></td><td><strong>String</strong>, default <code>No Items Found</code></td><td>The message users sees if there are no items added yet in the list.</td></tr><tr><td><code>data-default-item</code></td><td><strong>Object</strong>, default <code>{}</code></td><td>The default list item values used in adding new item, <strong>Required</strong> when using <code>doT.js</code> template engine</td></tr><tr><td><code>data-values</code></td><td><strong>JSON</strong>, default <code>[]</code></td><td>Default values to fill the list with on start, <strong>JSON</strong> array object.</td></tr>								</tbody>
 					</table>
 				</div>
 			</div>
@@ -428,50 +427,53 @@ $default_item_json = htmlentities( json_encode( array (
 ) ) );
 ?&gt;
 
-&lt;!-- List --&gt;
-&lt;ul class=&quot;repeatable&quot; data-confirm-remove=&quot;yes&quot; data-default-item=&quot;&lt;?php echo $default_item_json; ?&gt;&quot; data-values=&quot;&lt;?php echo $data_json; ?&gt;&quot;&gt;
-	&lt;li data-template=&quot;yes&quot; class=&quot;list-item&quot;&gt;
-		&lt;div class=&quot;form-group&quot;&gt;
-			&lt;label for=&quot;user[{index}][name]&quot; class=&quot;col-md-2 control-label&quot;&gt;Name&lt;/label&gt;
-			&lt;div class=&quot;col-md-8&quot;&gt;
-				&lt;input type=&quot;email&quot; class=&quot;form-control&quot; name=&quot;user[{index}][name]&quot; id=&quot;user[{index}][name]&quot; placeholder=&quot;Name&quot; value=&quot;{{=it.name}}&quot; /&gt;
+&lt;!-- template --&gt;
+&lt;script type=&quot;text/template&quot; id=&quot;item-template&quot;&gt;
+&lt;li class=&quot;list-item&quot;&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label for=&quot;user[{index}][name]&quot; class=&quot;col-md-2 control-label&quot;&gt;Name&lt;/label&gt;
+		&lt;div class=&quot;col-md-8&quot;&gt;
+			&lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;user[{index}][name]&quot; id=&quot;user[{index}][name]&quot; placeholder=&quot;Name&quot; value=&quot;{{=it.name}}&quot; /&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label for=&quot;user[{index}][email]&quot; class=&quot;col-md-2 control-label&quot;&gt;Email&lt;/label&gt;
+		&lt;div class=&quot;col-md-8&quot;&gt;
+			&lt;input type=&quot;email&quot; class=&quot;form-control&quot;name=&quot;user[{index}][email]&quot;  id=&quot;user[{index}][email]&quot; placeholder=&quot;Email&quot; value=&quot;{{=it.email}}&quot; /&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label for=&quot;user[{index}][gender]&quot; class=&quot;col-md-2 control-label&quot;&gt;Gender&lt;/label&gt;
+		&lt;div class=&quot;col-md-8&quot;&gt;
+			&lt;div class=&quot;radio-inline&quot;&gt;
+				&lt;label&gt;
+					{{ if( it.gender === &quot;male&quot; ) { }}
+					&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;male&quot; checked=&quot;checked&quot; /&gt;
+					{{ } else { }}
+					&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;male&quot; /&gt;
+					{{ } }}
+					Male
+				&lt;/label&gt;
+			&lt;/div&gt;
+			&lt;div class=&quot;radio-inline&quot;&gt;
+				&lt;label&gt;
+					{{ if( it.gender === &quot;female&quot; ) { }}
+					&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;female&quot; checked=&quot;checked&quot; /&gt;
+					{{ } else { }}
+					&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;female&quot; /&gt;
+					{{ } }}
+					Female
+				&lt;/label&gt;
 			&lt;/div&gt;
 		&lt;/div&gt;
-		&lt;div class=&quot;form-group&quot;&gt;
-			&lt;label for=&quot;user[{index}][email]&quot; class=&quot;col-md-2 control-label&quot;&gt;Email&lt;/label&gt;
-			&lt;div class=&quot;col-md-8&quot;&gt;
-				&lt;input type=&quot;email&quot; class=&quot;form-control&quot;name=&quot;user[{index}][email]&quot;  id=&quot;user[{index}][email]&quot; placeholder=&quot;Email&quot; value=&quot;{{=it.email}}&quot; /&gt;
-			&lt;/div&gt;
-		&lt;/div&gt;
-		&lt;div class=&quot;form-group&quot;&gt;
-			&lt;label for=&quot;user[{index}][gender]&quot; class=&quot;col-md-2 control-label&quot;&gt;Gender&lt;/label&gt;
-			&lt;div class=&quot;col-md-8&quot;&gt;
-				&lt;div class=&quot;radio-inline&quot;&gt;
-					&lt;label&gt;
-						{{ if( it.gender === 'male' ) { }}
-						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;male&quot; checked=&quot;checked&quot; /&gt;
-						{{ } else { }}
-						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;male&quot; /&gt;
-						{{ } }}
-						Male
-					&lt;/label&gt;
-				&lt;/div&gt;
-				&lt;div class=&quot;radio-inline&quot;&gt;
-					&lt;label&gt;
-						{{ if( it.gender === 'female' ) { }}
-						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;female&quot; checked=&quot;checked&quot; /&gt;
-						{{ } else { }}
-						&lt;input type=&quot;radio&quot; name=&quot;user[{index}][gender]&quot; id=&quot;user[{index}][gender]&quot; value=&quot;female&quot; /&gt;
-						{{ } }}
-						Female
-					&lt;/label&gt;
-				&lt;/div&gt;
-			&lt;/div&gt;
-			&lt;p class=&quot;col-md-2&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;btn btn-default&quot; data-remove=&quot;yes&quot;&gt;Remove&lt;/a&gt;&lt;/p&gt;
-		&lt;/div&gt;
-		&lt;hr class=&quot;divider&quot; /&gt;
-	&lt;/li&gt;
-&lt;/ul&gt;
+		&lt;p class=&quot;col-md-2&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;btn btn-default&quot; data-remove=&quot;yes&quot;&gt;Remove&lt;/a&gt;&lt;/p&gt;
+	&lt;/div&gt;
+	&lt;hr class=&quot;divider&quot; /&gt;
+&lt;/li&gt;
+&lt;/script&gt;
+
+&lt;!-- list --&gt;
+&lt;ul class=&quot;list-unstyled repeatable&quot; data-confirm-remove=&quot;yes&quot; data-template-selector=&quot;#item-template&quot; data-default-item=&quot;&lt;?php echo $default_item_json; ?&gt;&quot; data-values=&quot;&lt;?php echo $data_json; ?&gt;&quot;&gt;&lt;/ul&gt;
 
 &lt;!-- jQuery --&gt;
 &lt;script src=&quot;js/jquery.min.js&quot;&gt;&lt;/script&gt;
