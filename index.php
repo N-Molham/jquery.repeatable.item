@@ -62,7 +62,8 @@ if ( $output )
 							'description' => 'The message user sees to confirm.',
 					),
 					'data-empty-list-message' => array ( 
-							'value' => '<strong>String</strong>, default <code>No Items Found</code>',
+							'value' => '<strong>String</strong>, default <code>'. htmlentities( '<li>No Items Found</li>' ) .'</code><br/>'.
+										'set to <code>item</code> if you want a pre added empty item by default or empty string for no message',
 							'description' => 'The message users sees if there are no items added yet in the list.',
 					),
 					'data-default-item' => array ( 
@@ -134,8 +135,8 @@ if ( $output )
 							<table class="table table-bordered table-striped">
 								<colgroup>
 									<col class="col-xs-3">
-									<col class="col-xs-3">
-									<col class="col-xs-6">
+									<col class="col-xs-4">
+									<col class="col-xs-5">
 								</colgroup>
 								<thead>
 									<tr>
@@ -169,9 +170,9 @@ if ( $output )
 						<div class="table-responsive">
 							<table class="table table-bordered table-striped">
 								<colgroup>
-									<col class="col-xs-2">
+									<col class="col-xs-3">
 									<col class="col-xs-4">
-									<col class="col-xs-6">
+									<col class="col-xs-5">
 								</colgroup>
 								<thead>
 									<tr>
@@ -207,7 +208,7 @@ if ( $output )
 						<h3 class="panel-title">Simple List</h3>
 					</div>
 					<div class="panel-body">
-						<ul class="list-unstyled repeatable" data-empty-list-message="<?php echo htmlentities( '<p class="alert alert-info">No Items Yet</p>' ); ?>">
+						<ul class="list-unstyled repeatable" data-empty-list-message="<?php echo htmlentities( '<li><p class="alert alert-info">No Items Yet</p></li>' ); ?>">
 							<li data-template="yes" class="list-item">
 								<div class="row">
 									<p class="col-md-10"><input type="text" name="input[{index}]" placeholder="Input Label" class="form-control" /></p>
@@ -218,14 +219,9 @@ if ( $output )
 			
 						<p class="page-header">Code :</p>
 						<pre class="prettyprint"><?php echo htmlentities( '
-<!-- Empty list html entities -->
-<?php 
-$empty_msg = \'No Items Yet\';
-?>
-
 <!-- If you want HTML content as the empty message, just escape HTML entities, ex: in PHP -->
 <?php 
-$empty_msg = htmlentities( \'<p class="alert alert-info">No Items Yet</p>\' );
+$empty_msg = htmlentities( \'<li><p class="alert alert-info">No Items Yet</p></li>\' );
 ?>
 
 <!-- List -->
@@ -253,7 +249,51 @@ $empty_msg = htmlentities( \'<p class="alert alert-info">No Items Yet</p>\' );
 					</div>
 				</div>
 			</section>
-			
+
+			<section>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">List With Item Added By Default</h3>
+					</div>
+					<div class="panel-body">
+						<ul class="list-unstyled repeatable" data-empty-list-message="item">
+							<li data-template="yes" class="list-item">
+								<div class="row">
+									<p class="col-md-10"><input type="text" name="input[{index}]" placeholder="Input Label" class="form-control" /></p>
+									<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+								</div>
+							</li>
+						</ul>
+
+						<p class="page-header">Code :</p>
+						<pre class="prettyprint"><?php echo htmlentities( '
+<!-- If you want an empty item added by default to the list -->
+<!-- List -->
+<ul class="repeatable" data-empty-list-message="item">
+	<li data-template="yes" class="list-item">
+		<div class="row">
+			<p class="col-md-10"><input type="text" name="input[{index}]" class="form-control" /></p>
+			<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+		</div>
+	</li>
+</ul>
+
+<!-- jQuery -->
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.repeatable.item.js"></script>
+<script>
+( function ( window ) {
+	jQuery( function( $ ) {
+		$( \'.repeatable\' ).repeatable_item();
+	});
+} )( window );
+</script>
+' ); ?>
+						</pre>
+					</div>
+				</div>
+			</section>
+
 			<section>
 				<div class="panel panel-primary">
 					<div class="panel-heading">
@@ -514,47 +554,47 @@ $default_item_json = htmlentities( json_encode( array (
 							?>
 
 							<script type="text/template" id="item-template">
-							<li class="list-item">
-								<div class="form-group">
-									<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
-									<div class="col-md-8">
-										<input type="text" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
-									<div class="col-md-8">
-										<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
-									<div class="col-md-8">
-										<div class="radio-inline">
-											<label>
-												{{ if( it.gender === 'male' ) { }}
-												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
-												{{ } else { }}
-												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
-												{{ } }}
-												Male
-											</label>
-										</div>
-										<div class="radio-inline">
-											<label>
-												{{ if( it.gender === 'female' ) { }}
-												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
-												{{ } else { }}
-												<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
-												{{ } }}
-												Female
-											</label>
+								<li class="list-item">
+									<div class="form-group">
+										<label for="user[{index}][name]" class="col-md-2 control-label">Name</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="user[{index}][name]" id="user[{index}][name]" placeholder="Name" value="{{=it.name}}" />
 										</div>
 									</div>
-									<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
-								</div>
-								<hr class="divider" />
-							</li>
+									<div class="form-group">
+										<label for="user[{index}][email]" class="col-md-2 control-label">Email</label>
+										<div class="col-md-8">
+											<input type="email" class="form-control"name="user[{index}][email]"  id="user[{index}][email]" placeholder="Email" value="{{=it.email}}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="user[{index}][gender]" class="col-md-2 control-label">Gender</label>
+										<div class="col-md-8">
+											<div class="radio-inline">
+												<label>
+													{{ if( it.gender === 'male' ) { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" checked="checked" />
+													{{ } else { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="male" />
+													{{ } }}
+													Male
+												</label>
+											</div>
+											<div class="radio-inline">
+												<label>
+													{{ if( it.gender === 'female' ) { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" checked="checked" />
+													{{ } else { }}
+													<input type="radio" name="user[{index}][gender]" id="user[{index}][gender]" value="female" />
+													{{ } }}
+													Female
+												</label>
+											</div>
+										</div>
+										<p class="col-md-2"><a href="#" class="btn btn-default" data-remove="yes">Remove</a></p>
+									</div>
+									<hr class="divider" />
+								</li>
 							</script>
 
 							<ul class="list-unstyled repeatable" data-confirm-remove="yes" data-template-selector="#item-template" data-default-item="<?php echo $default_item_json; ?>" data-values="<?php echo $data_json; ?>"></ul>

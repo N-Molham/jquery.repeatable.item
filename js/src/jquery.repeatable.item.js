@@ -1,5 +1,5 @@
 /*!
- * Repeatable list item 1.6.0 (http://n-molham.github.io/jquery.repeatable.item/)
+ * Repeatable list item 1.6.5 (http://n-molham.github.io/jquery.repeatable.item/)
  * Copyright 2014 Nabeel Molham (http://nabeel.molham.me).
  * Licensed under MIT License (http://opensource.org/licenses/MIT)
  */
@@ -10,7 +10,7 @@
 		$.fn.repeatable_item = function( events ) {
 			// check if doT.js template engine is available
 			if ( typeof doT !== 'object' ) {
-				throw 'doT.js Template engine not found, click here https://github.com/olado/doT';
+				throw 'Repeatable Exception: doT.js Template engine not found, click here https://github.com/olado/doT';
 			}
 
 			// default events handler
@@ -77,7 +77,7 @@
 
 							default:
 								// fill in with value
-								item_content =  $list.item_template.html().replace( new RegExp( '{'+ $list.settings.valueKeyName +'}', 'g' ), data );
+								item_content =  $list.item_template.outerHTML().replace( new RegExp( '{'+ $list.settings.valueKeyName +'}', 'g' ), data );
 								break;
 						}
 
@@ -118,7 +118,7 @@
 					wrapperClass: 'repeatable-wrapper',
 					confirmRemoveMessage: 'Are Your Sure ?',
 					confirmRemove: 'no',
-					emptyListMessage: 'No Items Found',
+					emptyListMessage: '<li>No Items Found</li>',
 					defaultItem: {},
 					values: [],
 					is_empty: true
@@ -136,9 +136,12 @@
 					$list.item_template = $list.find( '> [data-template=yes]' ).removeAttr( 'data-template' ).remove();
 				} else {
 					// use external template from query selector
-					$list.item_template = $( $( $list.settings.templateSelector ).html() );
+					try {
+						$list.item_template = $( $( $list.settings.templateSelector ).html() );
+					} catch ( ex ) {
+						throw 'Repeatable Exception: Invalid item template selector <'+ $list.settings.templateSelector +'>';
+					}
 				}
-
 
 				if ( $list.item_template.size() !== 1 ) {
 					// throw exception cause the template item not set
@@ -156,11 +159,11 @@
 				}
 
 				// create add button and wrap if in p tag
-				$( '<p class="add-wrapper"><a href="#" class="'+ $list.settings.addButtonClass +'">'+ $list.settings.addButtonLabel +'</a></p>' )
+				$list.add_new_btn = $( '<p class="add-wrapper"><a href="#" class="'+ $list.settings.addButtonClass +'">'+ $list.settings.addButtonLabel +'</a></p>' )
 				// insert after the list
 				.insertAfter( $list )
 				// click event
-				.on( 'click', function( e ) {
+				.on( 'click repeatable-add-click', function( e ) {
 					e.preventDefault();
 
 					// add new item
@@ -189,9 +192,14 @@
 					}
 				}
 
-				// empty list label if is set
-				if ( $list.settings.is_empty && $list.settings.emptyListMessage != 'no' ) {
-					$list.append( '<li class="repeatable-empty">'+ $list.settings.emptyListMessage +'</li>' );
+				if ( $list.settings.is_empty && $list.settings.emptyListMessage.length ) {
+					if ( $list.settings.emptyListMessage == 'item' ) {
+						// empty list label if is set
+						$list.add_new_btn.trigger( 'repeatable-add-click' );
+					} else {
+						// empty list label if is set
+						$list.append( $( $list.settings.emptyListMessage ).addClass( 'repeatable-empty' ) );
+					}
 				}
 
 				// remove button
